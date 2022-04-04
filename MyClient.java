@@ -76,7 +76,7 @@
                         if (flag != true) {
                             for (int i = 0; i < serverCount; i++) {
                                 str = in .readLine();
-                                servers.add(str);
+                                servers.add(str);     //adding all the servers in the list 
                                 String serverInfo[] = str.split(" ");
 
                                 if (Integer.parseInt(serverInfo[4]) > serverCore) {
