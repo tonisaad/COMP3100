@@ -14,13 +14,16 @@
         private static boolean flag = false;
 
         public static void main(String[] args) {
+        
+            // create a socket       
             try {
                 Socket s = new Socket("127.0.0.1", 50000);
                 DataOutputStream dout = new DataOutputStream(s.getOutputStream());
                 BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream()));
 
-                System.out.println("Target IP: " + s.getInetAddress() + " Target Port: " + s.getPort());
-
+                System.out.println("Target IP: " + s.getInetAddress() + " Target Port: " + s.getPort()); 
+                
+                //Handshake HELO->OK->AUTH->OK
                 dout.write(("HELO\n").getBytes());
                 dout.flush();
                 String str = in .readLine();
@@ -31,11 +34,13 @@
                 dout.write(("AUTH " + username + "\n").getBytes());
                 str = in .readLine();
                 System.out.println("RCVD: " + str);
-
+                
+                //send REDY
                 dout.write(("REDY\n").getBytes());
                 dout.flush();
                 str = in .readLine();
 
+                //While last message from ds-server is not none
                 while (!str.equals("NONE")) {
                     System.out.println(str);
 
@@ -44,7 +49,7 @@
                     jobID = Integer.parseInt(jobInfo[2]);
 
                     if (jobInfo[0].equals("JCPL")) {
-                        dout.write(("REDY\n").getBytes());
+                        dout.write(("REDY\n").getBytes()); //send REDY
                         dout.flush();
                         str = in .readLine();
                     } else if (jobInfo[0].equals("JOBN")) {
@@ -59,13 +64,15 @@
 
                         dout.write(("OK\n").getBytes());
                         dout.flush();
-
+                        
+                        //handling server information
                         if (flag != false) {
                             for (int i = 0; i < serverCount; i++) {
                                 str = in .readLine();
                             }
                         }
                         
+                        //identifying largest server
                         if (flag != true) {
                             for (int i = 0; i < serverCount; i++) {
                                 str = in .readLine();
@@ -80,7 +87,7 @@
                             }
                         }
 
-          
+                        //finding number of largest servers
                         if (flag != true) {
                             for (int i = 0; i < servers.size(); i++) {
                                 String string[] = servers.get(i).split(" ");
@@ -95,21 +102,23 @@
                         dout.flush();
                         str = in .readLine();
                         System.out.println("RCVD: " + str);
-
+                        
                         remainder = jobID % largestServerCount;
                         serverID = remainder;
 
+                        //schedule a job
                         dout.write(("SCHD " + jobID + " " + serverType + " " + serverID + "\n").getBytes());
                         dout.flush();
                         str = in .readLine();
                         System.out.println("RCVD: " + str);
-
+                      
                         dout.write(("REDY\n").getBytes());
                         dout.flush();
                         str = in .readLine();
                     }
                 }
-
+                
+                // send QUIT 
                 System.out.println("SENT: QUIT");
                 dout.write(("QUIT\n").getBytes());
                 str = in .readLine();
