@@ -1,0 +1,7 @@
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Farooq
+    given-names: Saad
+title: "COMP3100 Project"
+version: 1.0.0
+date-released: 2022-04-04
