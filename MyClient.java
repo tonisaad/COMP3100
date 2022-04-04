@@ -1,6 +1,11 @@
+    //Student Name: SAAD FAROOQ
+    //Student ID: 45718210
+    
+    
     import java.io.*;
     import java.net.*;
     import java.util.ArrayList;
+    
     public class MyClient {
 
         private int serverNumber;
