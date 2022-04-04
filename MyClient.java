@@ -1,4 +1,4 @@
-import java.io.*;
+    import java.io.*;
     import java.net.*;
     import java.util.ArrayList;
     public class MyClient {
@@ -27,7 +27,7 @@ import java.io.*;
                 System.out.println(str);
 
                 String username = System.getProperty("user.name");
-                System.out.println("SENT: AUTH");
+                System.out.println("SENT: AUTH" + username);
                 dout.write(("AUTH " + username + "\n").getBytes());
                 str = in .readLine();
                 System.out.println("RCVD: " + str);
@@ -39,7 +39,7 @@ import java.io.*;
                 while (!str.equals("NONE")) {
                     System.out.println(str);
 
-                    System.out.println("RCVD1: " + str);
+                    System.out.println("RCVD: " + str);
                     String[] jobInfo = str.split(" ");
                     jobID = Integer.parseInt(jobInfo[2]);
 
@@ -48,11 +48,11 @@ import java.io.*;
                         dout.flush();
                         str = in .readLine();
                     } else if (jobInfo[0].equals("JOBN")) {
-
+                    
                         dout.write(("GETS Capable: " + jobInfo[4] + " " + jobInfo[5] + " " + jobInfo[6] + "\n").getBytes());
                         dout.flush();
                         str = in .readLine();
-                        System.out.println("RCVD2: " + str);
+                        System.out.println("RCVD: " + str);
 
                         String[] Info = str.split(" ");
                         int serverCount = Integer.parseInt(Info[1]);
@@ -65,14 +65,11 @@ import java.io.*;
                                 str = in .readLine();
                             }
                         }
+                        
                         if (flag != true) {
-
-
                             for (int i = 0; i < serverCount; i++) {
-
                                 str = in .readLine();
                                 servers.add(str);
-
                                 String serverInfo[] = str.split(" ");
 
                                 if (Integer.parseInt(serverInfo[4]) > serverCore) {
@@ -83,10 +80,7 @@ import java.io.*;
                             }
                         }
 
-                        System.out.println("largest server type: " + serverType);
-                        System.out.println("maxCore: " + serverCore);
-                        System.out.println("istSize: " + servers.size());
-
+          
                         if (flag != true) {
                             for (int i = 0; i < servers.size(); i++) {
                                 String string[] = servers.get(i).split(" ");
@@ -97,29 +91,22 @@ import java.io.*;
                             }
                         }
 
-
-                        System.out.println(largestServerCount);
-
                         dout.write(("OK\n").getBytes());
                         dout.flush();
-                        System.out.println(str);
                         str = in .readLine();
-                        System.out.println(str);
-                        System.out.println("RCVD3: " + str);
+                        System.out.println("RCVD: " + str);
 
                         remainder = jobID % largestServerCount;
                         serverID = remainder;
 
-
                         dout.write(("SCHD " + jobID + " " + serverType + " " + serverID + "\n").getBytes());
                         dout.flush();
                         str = in .readLine();
-                        System.out.println("RCVD4: " + str);
+                        System.out.println("RCVD: " + str);
 
                         dout.write(("REDY\n").getBytes());
                         dout.flush();
                         str = in .readLine();
-                        System.out.println(str);
                     }
                 }
 
